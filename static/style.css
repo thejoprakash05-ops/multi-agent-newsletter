@@ -45,18 +45,12 @@ body {
 
 .brand { display: flex; align-items: center; gap: .7rem; }
 
-.brand-icon {
+.brand-logo {
     width: 36px;
     height: 36px;
-    background: #fff;
-    color: var(--accent);
     border-radius: 9px;
-    font-size: 1rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
+    display: block;
 }
 
 .brand-title { font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
