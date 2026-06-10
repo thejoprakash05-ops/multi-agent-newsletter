@@ -1,0 +1,85 @@
+{
+  "updated_at": "2026-05-20T11:14:59.877923",
+  "headlines": [
+    {
+      "rank": 1,
+      "title": "OpenAI barrels towards IPO that may happen in September",
+      "source": "TechCrunch",
+      "link": "https://techcrunch.com/2026/05/20/openai-barrels-towards-ipo-that-may-happen-in-september/",
+      "category": "Tech",
+      "why": "Major development in AI industry as OpenAI moves toward public markets after winning key litigation, signaling significant market implications for generative AI sector."
+    },
+    {
+      "rank": 2,
+      "title": "Global EV market goes K-shaped as the U.S. gets left behind",
+      "source": "TechCrunch",
+      "link": "https://techcrunch.com/2026/05/20/global-ev-market-goes-k-shaped-as-the-u-s-gets-left-behind/",
+      "category": "Business",
+      "why": "Critical automotive and economic trend showing divergence in EV adoption globally with significant competitive implications for US manufacturers."
+    },
+    {
+      "rank": 3,
+      "title": "Buckle up: Google is set to remake search with agentic AI in 2026",
+      "source": "Ars Technica",
+      "link": "https://arstechnica.com/google/2026/05/buckle-up-google-is-set-to-remake-search-with-agentic-ai-in-2026/",
+      "category": "Tech",
+      "why": "Fundamental transformation of internet search technology with Google's agentic AI represents major shift in how users access information online."
+    },
+    {
+      "rank": 4,
+      "title": "GitHub says hackers stole data from thousands of internal repositories",
+      "source": "TechCrunch",
+      "link": "https://techcrunch.com/2026/05/20/github-says-hackers-stole-data-from-thousands-of-internal-repositories/",
+      "category": "Tech",
+      "why": "Major security breach at critical developer platform affecting code integrity and raising concerns about software supply chain security."
+    },
+    {
+      "rank": 5,
+      "title": "Intuit to lay off over 3,000 employees to refocus on AI",
+      "source": "TechCrunch",
+      "link": "https://techcrunch.com/2026/05/20/intuit-to-lay-off-over-3000-employees-to-refocus-on-ai/",
+      "category": "Business",
+      "why": "Large-scale corporate restructuring reflects industry-wide shift toward AI-first business models with significant workforce implications."
+    },
+    {
+      "rank": 6,
+      "title": "Customers say Trump Mobile is leaking their personal information",
+      "source": "TechCrunch",
+      "link": "https://techcrunch.com/2026/05/20/customers-say-trump-mobile-is-leaking-their-personal-information/",
+      "category": "Tech",
+      "why": "Serious data security breach affecting consumer privacy with potential regulatory and reputational consequences."
+    },
+    {
+      "rank": 7,
+      "title": "Google's SynthID AI watermarking tech is being adopted by OpenAI, Nvidia, and more",
+      "source": "Ars Technica",
+      "link": "https://arstechnica.com/google/2026/05/googles-synthid-ai-watermarking-tech-is-being-adopted-by-openai-nvidia-and-more/",
+      "category": "Tech",
+      "why": "Emerging industry standard for AI-generated content identification addresses critical misinformation concerns with broad adoption across major tech companies."
+    },
+    {
+      "rank": 8,
+      "title": "Man jailed for posting Trump meme wins $835,000 settlement",
+      "source": "Ars Technica",
+      "link": "https://arstechnica.com/tech-policy/2026/05/man-wins-835k-after-sheriff-jailed-him-for-a-month-over-charlie-kirk-post/",
+      "category": "Politics",
+      "why": "Significant First Amendment case setting precedent for free speech protections regarding political content online."
+    },
+    {
+      "rank": 9,
+      "title": "FBI seeks US-wide access to license plate cameras, wants \"data in near real time\"",
+      "source": "Ars Technica",
+      "link": "https://arstechnica.com/tech-policy/2026/05/fbi-seeks-us-wide-access-to-license-plate-cameras-wants-data-in-near-real-time/",
+      "category": "Politics",
+      "why": "Major surveillance expansion proposal raises critical privacy and civil liberties concerns affecting millions of Americans."
+    },
+    {
+      "rank": 10,
+      "title": "RFK Jr. forced to withdraw charter that opened CDC panel to anti-vaccine quacks",
+      "source": "Ars Technica",
+      "link": "https://arstechnica.com/health/2026/05/rfk-jr-forced-to-withdraw-charter-that-opened-cdc-panel-to-anti-vaccine-quacks/",
+      "category": "Health",
+      "why": "Public health policy development blocked amid concerns about vaccine credibility, affecting disease prevention and epidemic response capabilities."
+    }
+  ]
+}
