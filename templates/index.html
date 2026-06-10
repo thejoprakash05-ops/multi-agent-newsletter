@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Headlines</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="page-top">
+    <header class="site-header">
+        <div class="header-top">
+            <div class="brand">
+                <div class="brand-icon">N</div>
+                <div>
+                    <h1 class="brand-title">Daily Headlines</h1>
+                    <p class="brand-sub">AI-curated top stories</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button id="refresh-btn" class="btn-primary" onclick="manualRefresh()">
+                    <span id="refresh-icon">&#8635;</span> Refresh Now
+                </button>
+            </div>
+        </div>
+        <div class="header-bar">
+            <span class="schedule-badge">Auto-refresh: 9 AM &bull; 1 PM &bull; 6 PM</span>
+            <div class="header-meta">
+                <span id="last-updated"></span>
+                <span class="sep">&bull;</span>
+                <span>Next: <strong id="next-refresh"></strong></span>
+            </div>
+        </div>
+    </header>
+
+    <nav id="category-tabs" class="category-tabs" aria-label="Filter by category"></nav>
+</div>
+
+<main class="main-content">
+    <div id="status-loading" class="status-panel">
+        <div class="spinner"></div>
+        <p>Loading headlines&hellip;</p>
+    </div>
+    <div id="status-refreshing" class="status-panel hidden">
+        <div class="spinner"></div>
+        <p>Fetching latest stories with AI&hellip;</p>
+    </div>
+    <div id="status-error" class="status-panel status-error hidden">
+        <p><strong>Error:</strong> <span id="error-msg">Could not load headlines.</span></p>
+        <button class="btn-secondary" onclick="loadHeadlines()">Try Again</button>
+    </div>
+    <div id="status-empty" class="status-panel hidden">
+        <p>No headlines yet. Click &ldquo;Refresh Now&rdquo; to fetch today&rsquo;s top stories.</p>
+        <button class="btn-primary" onclick="manualRefresh()" style="margin-top:.75rem">Fetch Headlines</button>
+    </div>
+    <div id="status-no-cat" class="status-panel hidden">
+        <p>No stories in this category yet &mdash; try &ldquo;Refresh Now&rdquo; or pick another tab.</p>
+    </div>
+    <div id="headlines-grid" class="headlines-grid hidden"></div>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
