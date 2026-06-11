@@ -1,6 +1,6 @@
 "use strict";
 
-// ── Easy to configure: add / remove / reorder category tabs here ───────────
+// ── Category tabs ─────────────────────────────────────────────────────────────
 const CATEGORIES = [
     { id: "all",           label: "All" },
     { id: "tech",          label: "Tech" },
@@ -13,6 +13,7 @@ const CATEGORIES = [
     { id: "tennis",        label: "Tennis" },
     { id: "eda",           label: "EDA" },
     { id: "semiconductor", label: "Semiconductor" },
+    { id: "saved",         label: "★ Saved" },
 ];
 
 // Must match REFRESH_TIMES in config.py
@@ -44,15 +45,15 @@ const MAX_PER_TAB = 12;   // must match MAX_PER_CATEGORY in config.py
 let currentUpdatedAt = null;
 let allHeadlines     = [];
 let currentCategory  = "all";
+let searchQuery      = "";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function getCategoryStyle(category) {
     const key = (category || "other").toLowerCase().split(/[|\/]/)[0].trim();
     return CATEGORY_STYLES[key] || CATEGORY_STYLES.other;
 }
 
-// Case-insensitive exact match — "Semiconductor" matches tab id "semiconductor"
 function matchesCategory(category, tabId) {
     if (tabId === "all") return true;
     return (category || "other").toLowerCase().trim() === tabId.toLowerCase().trim();
@@ -90,7 +91,7 @@ function hide(id) { document.getElementById(id).classList.add("hidden"); }
 
 function setStatus(activeId) {
     ["status-loading", "status-refreshing", "status-error",
-     "status-empty", "status-no-cat", "headlines-grid"]
+     "status-empty", "status-no-cat", "status-no-saved", "headlines-grid"]
         .forEach(id => hide(id));
     show(activeId);
 }
@@ -103,6 +104,43 @@ function updateMeta(updatedAt) {
         getNextRefreshTime().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
 }
 
+// ── Saved articles (localStorage) ────────────────────────────────────────────
+
+function getSaved() {
+    try { return JSON.parse(localStorage.getItem("savedArticles") || "{}"); }
+    catch { return {}; }
+}
+
+function isSaved(link) {
+    return !!getSaved()[link];
+}
+
+function setSaved(saved) {
+    localStorage.setItem("savedArticles", JSON.stringify(saved));
+}
+
+function saveArticle(article) {
+    const saved = getSaved();
+    saved[article.link] = article;
+    setSaved(saved);
+}
+
+function unsaveArticle(link) {
+    const saved = getSaved();
+    delete saved[link];
+    setSaved(saved);
+}
+
+function toggleSave(link, article) {
+    if (isSaved(link)) {
+        unsaveArticle(link);
+        return false;
+    } else {
+        if (article) saveArticle(article);
+        return true;
+    }
+}
+
 // ── Category tabs ─────────────────────────────────────────────────────────────
 
 function renderTabs() {
@@ -110,7 +148,9 @@ function renderTabs() {
     nav.innerHTML = "";
     CATEGORIES.forEach(cat => {
         const btn = document.createElement("button");
-        btn.className   = "tab-btn" + (cat.id === currentCategory ? " active" : "");
+        btn.className = "tab-btn"
+            + (cat.id === currentCategory ? " active" : "")
+            + (cat.id === "saved" ? " tab-saved" : "");
         btn.textContent = cat.label;
         btn.dataset.id  = cat.id;
         btn.addEventListener("click", () => selectCategory(cat.id));
@@ -126,16 +166,53 @@ function selectCategory(id) {
     filterAndRender();
 }
 
+// ── Search ────────────────────────────────────────────────────────────────────
+
+function onSearch(value) {
+    searchQuery = value.trim();
+    document.getElementById("search-clear").classList.toggle("hidden", !searchQuery);
+    filterAndRender();
+}
+
+function clearSearch() {
+    searchQuery = "";
+    document.getElementById("search-input").value = "";
+    document.getElementById("search-clear").classList.add("hidden");
+    filterAndRender();
+}
+
 // ── Render ────────────────────────────────────────────────────────────────────
 
 function filterAndRender() {
-    const filtered = allHeadlines
-        .filter(h => matchesCategory(h.category, currentCategory))
+    // Pick source pool
+    let pool = currentCategory === "saved"
+        ? Object.values(getSaved())
+        : allHeadlines.filter(h => matchesCategory(h.category, currentCategory));
+
+    // Apply search
+    if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        pool = pool.filter(h =>
+            (h.title  || "").toLowerCase().includes(q) ||
+            (h.source || "").toLowerCase().includes(q) ||
+            (h.why    || "").toLowerCase().includes(q)
+        );
+    }
+
+    const filtered = pool
         .sort((a, b) => (a.rank || 0) - (b.rank || 0))
         .slice(0, MAX_PER_TAB);
 
     if (!filtered.length) {
-        setStatus(allHeadlines.length ? "status-no-cat" : "status-empty");
+        if (currentCategory === "saved" && !searchQuery) {
+            setStatus("status-no-saved");
+        } else {
+            const msg = searchQuery
+                ? `No results for &ldquo;${escapeHtml(searchQuery)}&rdquo;`
+                : "No stories in this category yet &mdash; try &ldquo;Refresh Now&rdquo; or pick another tab.";
+            document.getElementById("status-no-cat-msg").innerHTML = msg;
+            setStatus("status-no-cat");
+        }
         return;
     }
 
@@ -147,6 +224,7 @@ function filterAndRender() {
         card.className = "headline-card";
         card.style.setProperty("--card-accent",    style.accent);
         card.style.setProperty("--card-accent-bg", style.bg);
+
         card.innerHTML = `
             <div class="card-header">
                 <div class="rank-badge">${h.rank}</div>
@@ -156,9 +234,29 @@ function filterAndRender() {
             ${h.why ? `<p class="card-why">${escapeHtml(h.why)}</p>` : ""}
             <div class="card-footer">
                 <span class="source-tag">${escapeHtml(h.source || "")}</span>
-                ${h.link ? `<a href="${escapeHtml(h.link)}" class="read-link" target="_blank" rel="noopener">Read more &rarr;</a>` : ""}
+                <div class="card-actions">
+                    <button class="star-btn" aria-label="Save article"></button>
+                    ${h.link ? `<a href="${escapeHtml(h.link)}" class="read-link" target="_blank" rel="noopener">Read more &rarr;</a>` : ""}
+                </div>
             </div>
         `;
+
+        // Wire up star button without inline handlers
+        const starBtn = card.querySelector(".star-btn");
+        const updateStar = () => {
+            const saved = isSaved(h.link);
+            starBtn.textContent = saved ? "★" : "☆";
+            starBtn.title       = saved ? "Unsave" : "Save for later";
+            starBtn.classList.toggle("saved", saved);
+        };
+        updateStar();
+        starBtn.addEventListener("click", () => {
+            toggleSave(h.link, h);
+            updateStar();
+            // Remove card immediately when unsaving inside the Saved tab
+            if (currentCategory === "saved" && !isSaved(h.link)) filterAndRender();
+        });
+
         grid.appendChild(card);
     });
     setStatus("headlines-grid");
@@ -208,7 +306,6 @@ async function manualRefresh() {
     }
 }
 
-// Poll every 60 s to pick up scheduled background refreshes
 async function pollForUpdates() {
     try {
         const res = await fetch("/api/headlines");
@@ -227,6 +324,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setStatus("status-loading");
     updateMeta(null);
     loadHeadlines();
+
+    const searchInput = document.getElementById("search-input");
+    searchInput.addEventListener("input",  e => onSearch(e.target.value));
+    searchInput.addEventListener("keydown", e => { if (e.key === "Escape") clearSearch(); });
+    document.getElementById("search-clear").addEventListener("click", clearSearch);
+
     setInterval(pollForUpdates, 60_000);
     setInterval(() => updateMeta(currentUpdatedAt), 30_000);
 });

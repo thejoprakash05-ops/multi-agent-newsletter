@@ -35,7 +35,15 @@
         </div>
     </header>
 
-    <nav id="category-tabs" class="category-tabs" aria-label="Filter by category"></nav>
+    <div class="tabs-search-row">
+        <nav id="category-tabs" class="category-tabs" aria-label="Filter by category"></nav>
+        <div class="search-wrap">
+            <span class="search-icon">&#128269;</span>
+            <input id="search-input" class="search-input" type="search"
+                   placeholder="Search headlines&hellip;" autocomplete="off">
+            <button id="search-clear" class="search-clear hidden" aria-label="Clear search">&times;</button>
+        </div>
+    </div>
 </div>
 
 <main class="main-content">
@@ -56,7 +64,10 @@
         <button class="btn-primary" onclick="manualRefresh()" style="margin-top:.75rem">Fetch Headlines</button>
     </div>
     <div id="status-no-cat" class="status-panel hidden">
-        <p>No stories in this category yet &mdash; try &ldquo;Refresh Now&rdquo; or pick another tab.</p>
+        <p id="status-no-cat-msg">No stories in this category yet &mdash; try &ldquo;Refresh Now&rdquo; or pick another tab.</p>
+    </div>
+    <div id="status-no-saved" class="status-panel hidden">
+        <p>&#9733; No saved stories yet &mdash; click the star on any card to save it.</p>
     </div>
     <div id="headlines-grid" class="headlines-grid hidden"></div>
 </main>
