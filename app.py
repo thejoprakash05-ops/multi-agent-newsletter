@@ -84,4 +84,4 @@ if __name__ == "__main__":
         except Exception as exc:
             logger.warning("Initial fetch failed (%s). Click Refresh Now in the UI.", exc)
 
-    app.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)
+    app.run(host="0.0.0.0", port=5678, debug=False, use_reloader=False)
